@@ -1,0 +1,2 @@
+ls 40_qa/*.xml | xargs -I {} basename {} .xml | sort | xargs -t -I {} ~/gt/bin/greeker.py 40_qa/{}.xml test-eac/{}.xml
+ls test-eac/*.xml | xargs -I {} basename {} .xml | xargs -t -I {} saxon -o html/{}.html test-eac/{}.xml xslt/cpf2html.xsl 
