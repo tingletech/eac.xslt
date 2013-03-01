@@ -8,14 +8,18 @@
   xmlns:xtf="http://cdlib.org/xtf"
   exclude-result-prefixes="#all"
   version="2.0">
+
   <xsl:template name="google-tracking-code">
+    <xsl:variable name="uacode" select="document('UA-code.xml')/UA"/>
     <!-- http://code.google.com/apis/analytics/docs/gaJS/gaJSApi_gaq.html -->
-    <script type="text/javascript">
+    <xsl:if test="$uacode">
+<script type="text/javascript">
 /*jslint nomen: false */
 var _gaq = _gaq || [];
-_gaq.push(['_gat._anonymizeIp'], ['snak._setAccount', '<xsl:value-of select="document('UA-code.xml')/UA"/>'], ['snak._trackPageview']);
+_gaq.push(['_gat._anonymizeIp'], ['snak._setAccount', '<xsl:value-of select="$uacode"/>'], ['snak._trackPageview']);
 /*jslint nomen: true */
-    </script>
+</script>
+    </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
 
