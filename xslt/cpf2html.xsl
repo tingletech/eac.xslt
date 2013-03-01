@@ -50,7 +50,11 @@ needs to exits containing a single element `<UA>` containing the
 tracking code/number for the google analytics account
 -->
   <xsl:param name="GoogleAnalytics" select="false()"/>
-  
+
+<!-- asset base -->
+
+  <xsl:param name="asset_base" select="false()"/> 
+ 
   <!-- XTF parameters -->
   <xsl:param name="docId"/>
   <xsl:param name="mode"/>
@@ -84,6 +88,47 @@ tracking code/number for the google analytics account
 
   <!-- templates that match the HTML -->
 
+  <xsl:template match="*:link[@rel='stylesheet' and starts-with(@href,'../css/golden-grid-css/')]">
+    <xsl:choose>
+      <xsl:when test="$asset_base">
+        <xsl:element name="{name()}">
+          <xsl:attribute name="rel" select="'stylesheet'"/>
+          <xsl:attribute name="href" select="replace(@href,'../css/golden-grid-css/',$asset_base)"/>
+        </xsl:element>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="*:link[@rel='stylesheet' and @href='../css/cpf2html.css']">
+    <xsl:choose>
+      <xsl:when test="$asset_base">
+        <xsl:element name="{name()}">
+          <xsl:attribute name="rel" select="'stylesheet'"/>
+          <xsl:attribute name="href" select="replace(@href,'../css/',$asset_base)"/>
+        </xsl:element>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="*:script[@src='../xslt/html-template.js']">
+    <xsl:choose>
+      <xsl:when test="$asset_base">
+        <xsl:element name="{name()}">
+          <xsl:attribute name="src" select="replace(@src,'../xslt/',$asset_base)"/>
+        </xsl:element>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template match="link[@rel='alternate'][@type='application/rdf+xml']">
     <xsl:if test="$inXTF">
     <xsl:variable name="LOD_URI">
@@ -104,7 +149,6 @@ tracking code/number for the google analytics account
 
   <xsl:template match='*[@data-change-value="html-title"]'>
     <xsl:element name="{name()}">
-      <xsl:copy-of select="@*"/>
       <xsl:copy-of select="@*"/>
       <xsl:value-of select="($page)/eac:eac-cpf/eac:cpfDescription/eac:identity/eac:nameEntry[1]/eac:part"/>
       <xsl:text> [</xsl:text>

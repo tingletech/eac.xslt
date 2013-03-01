@@ -5,3 +5,5 @@ ls test-eac/*.xml | xargs -I {} basename {} .xml | xargs -t -I {} saxon -o html/
 
 saxon 9
 ls test-eac/*.xml | xargs -I {} basename {} .xml | xargs -t -I {} saxon -o:html/{}.html test-eac/{}.xml xslt/cpf2html.xsl 
+
+ls 40_qa/*.xml | xargs -I {} basename {} .xml | xargs -t -I {} saxon -o ~/test-page/40_qa_html/{}.html 40_qa/{}.xml xslt/cpf2html.xsl asset_base=http://socialarchive.iath.virginia.edu/test-page/40_qa_html/css+js/
